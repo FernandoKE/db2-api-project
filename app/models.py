@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -22,7 +22,7 @@ class Book(Base):
 
     # relationships
     author: "Mapped[Author]" = relationship(back_populates="books")
-    categories: "Mapped[list[Category]]" = relationship(
+    categories: "Mapped[List[Category]]" = relationship(
         back_populates="books", secondary="books_categories"
     )
 
@@ -36,7 +36,7 @@ class Author(Base):
     date_of_birth: Mapped[Optional[date]]
 
     # relationships
-    books: "Mapped[list[Book]]" = relationship(back_populates="author")
+    books: "Mapped[List[Book]]" = relationship(back_populates="author")
 
 
 class Category(Base):
@@ -46,7 +46,7 @@ class Category(Base):
     name: Mapped[str]
 
     # relationships
-    books: "Mapped[list[Book]]" = relationship(
+    books: "Mapped[List[Book]]" = relationship(
         back_populates="categories", secondary="books_categories"
     )
 

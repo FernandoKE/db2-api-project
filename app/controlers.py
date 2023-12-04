@@ -1,3 +1,4 @@
+from typing import List
 from litestar import Controller, get, patch, post
 from litestar.di import Provide
 from litestar.dto import DTOData
@@ -9,6 +10,8 @@ from app.dtos import (
     AuthorWriteDTO,
     BookReadDTO,
     BookWriteDTO,
+    BookUpdateDTO,
+    CategoryDTO,
 )
 from app.models import Author, Book
 from app.repositories import (
@@ -26,7 +29,7 @@ class AuthorController(Controller):
     dependencies = {"authors_repo": Provide(provide_authors_repo)}
 
     @get()
-    async def list_authors(self, authors_repo: AuthorRepository) -> list[Author]:
+    async def list_authors(self, authors_repo: AuthorRepository) -> List[Author]:
         return authors_repo.list()
 
     @post(dto=AuthorWriteDTO)
@@ -53,9 +56,19 @@ class BookController(Controller):
     dependencies = {"books_repo": Provide(provide_books_repo)}
 
     @get()
-    async def list_books(self, books_repo: BookRepository) -> list[Book]:
+    async def list_books(self, books_repo: BookRepository) -> List[Book]:
         return books_repo.list()
 
     @post(dto=BookWriteDTO)
     async def create_book(self, data: Book, books_repo: BookRepository) -> Book:
         return books_repo.add(data)
+
+    @get("/{book_id:int}", return_dto=BookReadDTO)
+    async def get_book(self, book_id: int, books_repo: BookRepository) -> Book:
+        return books_repo.get(book_id)
+
+    @patch("/{book_id:int}", dto=BookUpdateDTO)
+    async def update_book(self, book_id: int, data: DTOData[Book], books_repo: BookRepository) -> Book:
+        book = books_repo.get(book_id)
+        book = data.update_instance(book)
+        return books_repo.update(book)

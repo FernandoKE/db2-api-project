@@ -3,9 +3,10 @@
 
 [metadata]
 groups = ["default", "dev"]
-strategy = ["cross_platform"]
-lock_version = "4.4"
-content_hash = "sha256:e0b1ed0f72fd4d59dbb04747edd592eb053ca5105ef0d9639c2972d413b2c1c2"
+cross_platform = true
+static_urls = false
+lock_version = "4.3"
+content_hash = "sha256:34c4e0c9a250fe9a6a5a84e9089d61dfef0e74a4b36a3ead7cfc0265d3f9b4ea"
 
 [[package]]
 name = "advanced-alchemy"
